@@ -18,3 +18,26 @@ class TestCase(db.Model):
     case_title = Column(String(100),nullable=False)
     remark = Column(String(100))
 
+
+
+    @classmethod
+    def get_by_filter(cls,**kwargs):
+        return  cls.query.filter_by(**kwargs).first()
+
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
+
+    @classmethod
+    def create(cls,case_id,case_title,remark):
+        case = cls(case_id=case_id,case_title=case_title,remark=remark)
+        db.session.add(case)
+        # 提交数据库中
+        db.session.commit()
+        db.session.close()
+
+    @classmethod
+    def update(cls,case_id,case_data):
+        cls.query.filter_by(case_id=case_id).update(case_data)
+
